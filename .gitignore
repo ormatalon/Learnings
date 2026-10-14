@@ -1,7 +1,11 @@
 .env
 .vscode
 .ipynb_checkpoints
+.kilo
 .DS_Store
+<<<<<<< HEAD
 *.png
 *.jpg
 
+=======
+>>>>>>> origin/main
