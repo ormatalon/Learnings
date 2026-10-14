@@ -1,0 +1,448 @@
+created: '2026-10-14'
+versions:
+  dsprep: 0.2.0
+  pandas: 2.1.1
+  numpy: 1.24.3
+  scikit-learn: 1.3.0
+eda_source: eda_clinvar.ipynb
+user_overrides:
+- key: recommendations.leakage
+  eda_value:
+  - column: CLNDN
+    evidence: names collected per submission; 22% conflicting with 1 name vs 40% with
+      4+ (AUC 0.57)
+    verdict: check_with_user
+  - column: CLNDISDB
+    evidence: same information as CLNDN as database IDs
+    verdict: check_with_user
+  - column: CLNSIGINCL
+    evidence: clinical-significance field; 167 rows, 41% conflicting vs 25%
+    verdict: check_with_user
+  - column: CLNVI
+    evidence: external cross-references; 32% conflicting when present vs 20%
+    verdict: keep
+  user_value:
+  - column: CLNDN
+    evidence: user chose to keep
+    verdict: keep
+  - column: CLNDISDB
+    evidence: user chose to keep
+    verdict: keep
+  - column: CLNSIGINCL
+    evidence: user chose to keep
+    verdict: keep
+  - column: CLNVI
+    evidence: user chose to keep
+    verdict: keep
+- key: validation.split
+  eda_value: stratified
+  user_value: group_stratified
+- key: validation.stratify_on
+  eda_value:
+  - CLASS
+  user_value:
+  - CLASS
+- key: open_questions
+  eda_value:
+  - 'When is a variant scored: on existing ClinVar records (keep CLNDN / CLNDISDB)
+    or at first submission (drop them as leakage)?'
+  - 'Keep CLNSIGINCL (167 rows, a clinical-significance field)? Default: drop.'
+  - 'Primary validation: random stratified (variants in known genes) or grouped by
+    gene (unseen genes)?'
+  user_value: []
+cleaning:
+- step: parsing_fixes
+  column: cDNA_position
+  action: manual
+  n_affected: null
+  note: take the first integer of the text ('943-944' -> 943, '?-117' -> 117)
+- step: parsing_fixes
+  column: CDS_position
+  action: manual
+  n_affected: null
+  note: take the first integer of the text ('943-944' -> 943, '?-117' -> 117)
+- step: parsing_fixes
+  column: Protein_position
+  action: manual
+  n_affected: null
+  note: take the first integer of the text ('943-944' -> 943, '?-117' -> 117)
+- step: parsing_fixes
+  column: EXON
+  action: manual
+  n_affected: null
+  note: split 'n/total' into EXON_num and EXON_total
+- step: parsing_fixes
+  column: INTRON
+  action: manual
+  n_affected: null
+  note: split 'n/total' into INTRON_num and INTRON_total
+- step: drop_columns
+  column: POS
+  action: dropped
+  n_affected: null
+  note: genomic coordinate, part of the key
+- step: drop_columns
+  column: CLNHGVS
+  action: dropped
+  n_affected: null
+  note: unique identifier (key as a string)
+- step: drop_columns
+  column: Allele
+  action: dropped
+  n_affected: null
+  note: same as ALT in VEP notation
+- step: drop_columns
+  column: Feature
+  action: dropped
+  n_affected: null
+  note: transcript ID, one-to-one with SYMBOL for 98.4% of genes
+- step: drop_columns
+  column: Feature_type
+  action: dropped
+  n_affected: null
+  note: near-constant (99.98% Transcript)
+- step: drop_columns
+  column: BIOTYPE
+  action: dropped
+  n_affected: null
+  note: near-constant (99.95% protein_coding)
+- step: drop_columns
+  column: MOTIF_NAME
+  action: dropped
+  n_affected: null
+  note: 100% missing
+- step: drop_columns
+  column: MOTIF_POS
+  action: dropped
+  n_affected: null
+  note: 100% missing
+- step: drop_columns
+  column: HIGH_INF_POS
+  action: dropped
+  n_affected: null
+  note: 100% missing
+- step: drop_columns
+  column: MOTIF_SCORE_CHANGE
+  action: dropped
+  n_affected: null
+  note: 100% missing
+- step: drop_columns
+  column: DISTANCE
+  action: dropped
+  n_affected: null
+  note: 99.8% missing
+- step: drop_columns
+  column: SSR
+  action: dropped
+  n_affected: null
+  note: 99.8% missing, no target association (BH p 0.57)
+- step: drop_columns
+  column: CLNDISDBINCL
+  action: dropped
+  n_affected: null
+  note: 99.7% missing
+- step: drop_columns
+  column: CLNDNINCL
+  action: dropped
+  n_affected: null
+  note: 99.7% missing
+- step: drop_columns
+  column: CADD_RAW
+  action: dropped
+  n_affected: null
+  note: Spearman 1.00 with CADD_PHRED
+- step: drop_columns
+  column: CDS_position
+  action: dropped
+  n_affected: null
+  note: Pearson 1.00 with cDNA_position, which covers more rows
+- step: drop_columns
+  column: Protein_position
+  action: dropped
+  n_affected: null
+  note: Pearson 1.00 with cDNA_position
+target:
+  task: binary
+  mode: auto
+  classes:
+  - '0'
+  - '1'
+  positive_class: '1'
+  log:
+  - processor: TargetProcessor
+    column: <target>
+    action: binary_map
+    detail: 0 -> 0, 1 -> 1
+split:
+  how: group_stratified
+  sizes:
+  - 0.7
+  - 0.15
+  - 0.15
+  group_col: SYMBOL
+  stratify_col: CLASS
+  seed: 42
+feature_sets:
+  catboost:
+    n_features: 126
+    cat_features:
+    - CHROM
+    - CLNVC
+    - IMPACT
+    - SIFT
+    - PolyPhen
+    - BAM_EDIT
+    - snv_change
+    - aa_ref
+    - aa_alt
+    text_features: []
+    unused_input_columns:
+    - REF
+    - ALT
+    - CLNSIGINCL
+    - MC
+    - ORIGIN
+    - CLASS
+    - SYMBOL
+    - Amino_acids
+    - Codons
+    log:
+    - step: num
+      processor: NumericProcessor
+      column: CADD_PHRED
+      action: missing_indicator
+      detail: train missing rate 1.564%
+    - step: num
+      processor: NumericProcessor
+      column: LoFtool
+      action: missing_indicator
+      detail: train missing rate 7.005%
+    - step: cat
+      processor: CategoricalProcessor
+      column: CHROM
+      action: native
+      detail: 24 levels kept as str
+    - step: cat
+      processor: CategoricalProcessor
+      column: CLNVC
+      action: native
+      detail: 7 levels kept as str
+    - step: cat
+      processor: CategoricalProcessor
+      column: IMPACT
+      action: native
+      detail: 4 levels kept as str
+    - step: cat
+      processor: CategoricalProcessor
+      column: SIFT
+      action: native
+      detail: 5 levels kept as str
+    - step: cat
+      processor: CategoricalProcessor
+      column: PolyPhen
+      action: native
+      detail: 5 levels kept as str
+    - step: cat
+      processor: CategoricalProcessor
+      column: BAM_EDIT
+      action: native
+      detail: 3 levels kept as str
+    - step: cat
+      processor: CategoricalProcessor
+      column: snv_change
+      action: native
+      detail: 13 levels kept as str
+    - step: cat
+      processor: CategoricalProcessor
+      column: aa_ref
+      action: native
+      detail: 428 levels kept as str
+    - step: cat
+      processor: CategoricalProcessor
+      column: aa_alt
+      action: native
+      detail: 237 levels kept as str
+    - step: list
+      processor: ListProcessor
+      column: CLNDN
+      action: items
+      detail: 3224 distinct items in train, 30 expanded (top_k=30, item must appear
+        in >= 241 rows)
+    - step: list
+      processor: ListProcessor
+      column: CLNVI_sources
+      action: items
+      detail: 56 distinct items in train, 6 expanded (top_k=10, item must appear in
+        >= 241 rows)
+    - step: list
+      processor: ListProcessor
+      column: MC_terms
+      action: items
+      detail: 11 distinct items in train, 10 expanded (top_k=20, item must appear
+        in >= 241 rows)
+    - step: list
+      processor: ListProcessor
+      column: Consequence
+      action: items
+      detail: 23 distinct items in train, 11 expanded (top_k=20, item must appear
+        in >= 241 rows)
+    - step: list
+      processor: ListProcessor
+      column: CLNSIGINCL_sig
+      action: items
+      detail: 8 distinct items in train, 2 expanded (top_k=10, item must appear in
+        >= 24 rows)
+  gbm:
+    n_features: 126
+    cat_features: []
+    text_features: []
+    unused_input_columns:
+    - REF
+    - ALT
+    - CLNSIGINCL
+    - MC
+    - ORIGIN
+    - CLASS
+    - SYMBOL
+    - Amino_acids
+    - Codons
+    log:
+    - step: num
+      processor: NumericProcessor
+      column: CADD_PHRED
+      action: missing_indicator
+      detail: train missing rate 1.564%
+    - step: num
+      processor: NumericProcessor
+      column: LoFtool
+      action: missing_indicator
+      detail: train missing rate 7.005%
+    - step: cat
+      processor: CategoricalProcessor
+      column: CHROM
+      action: group_rare
+      detail: 3 levels (942 rows) -> __OTHER__
+    - step: cat
+      processor: CategoricalProcessor
+      column: CHROM
+      action: ordinal
+      detail: 22 codes
+    - step: cat
+      processor: CategoricalProcessor
+      column: CLNVC
+      action: group_rare
+      detail: 4 levels (259 rows) -> __OTHER__
+    - step: cat
+      processor: CategoricalProcessor
+      column: CLNVC
+      action: ordinal
+      detail: 4 codes
+    - step: cat
+      processor: CategoricalProcessor
+      column: IMPACT
+      action: ordinal
+      detail: 4 codes
+    - step: cat
+      processor: CategoricalProcessor
+      column: SIFT
+      action: ordinal
+      detail: 5 codes
+    - step: cat
+      processor: CategoricalProcessor
+      column: PolyPhen
+      action: group_rare
+      detail: 1 levels (3 rows) -> __OTHER__
+    - step: cat
+      processor: CategoricalProcessor
+      column: PolyPhen
+      action: ordinal
+      detail: 5 codes
+    - step: cat
+      processor: CategoricalProcessor
+      column: BAM_EDIT
+      action: group_rare
+      detail: 1 levels (262 rows) -> __OTHER__
+    - step: cat
+      processor: CategoricalProcessor
+      column: BAM_EDIT
+      action: ordinal
+      detail: 3 codes
+    - step: cat
+      processor: CategoricalProcessor
+      column: snv_change
+      action: ordinal
+      detail: 13 codes
+    - step: cat
+      processor: CategoricalProcessor
+      column: aa_ref
+      action: group_rare
+      detail: 408 levels (1120 rows) -> __OTHER__
+    - step: cat
+      processor: CategoricalProcessor
+      column: aa_ref
+      action: ordinal
+      detail: 21 codes
+    - step: cat
+      processor: CategoricalProcessor
+      column: aa_alt
+      action: group_rare
+      detail: 214 levels (701 rows) -> __OTHER__
+    - step: cat
+      processor: CategoricalProcessor
+      column: aa_alt
+      action: ordinal
+      detail: 24 codes
+    - step: list
+      processor: ListProcessor
+      column: CLNDN
+      action: items
+      detail: 3224 distinct items in train, 30 expanded (top_k=30, item must appear
+        in >= 241 rows)
+    - step: list
+      processor: ListProcessor
+      column: CLNVI_sources
+      action: items
+      detail: 56 distinct items in train, 6 expanded (top_k=10, item must appear in
+        >= 241 rows)
+    - step: list
+      processor: ListProcessor
+      column: MC_terms
+      action: items
+      detail: 11 distinct items in train, 10 expanded (top_k=20, item must appear
+        in >= 241 rows)
+    - step: list
+      processor: ListProcessor
+      column: Consequence
+      action: items
+      detail: 23 distinct items in train, 11 expanded (top_k=20, item must appear
+        in >= 241 rows)
+    - step: list
+      processor: ListProcessor
+      column: CLNSIGINCL_sig
+      action: items
+      detail: 8 distinct items in train, 2 expanded (top_k=10, item must appear in
+        >= 24 rows)
+outputs:
+  X_train_catboost: data/processed\X_train_catboost.parquet
+  X_val_catboost: data/processed\X_val_catboost.parquet
+  X_test_catboost: data/processed\X_test_catboost.parquet
+  X_train_gbm: data/processed\X_train_gbm.parquet
+  X_val_gbm: data/processed\X_val_gbm.parquet
+  X_test_gbm: data/processed\X_test_gbm.parquet
+  y_train: data/processed\y_train.parquet
+  y_val: data/processed\y_val.parquet
+  y_test: data/processed\y_test.parquet
+  groups_train: data/processed\groups_train.parquet
+  groups_val: data/processed\groups_val.parquet
+  groups_test: data/processed\groups_test.parquet
+  feature_processor_catboost: models/feature_processor_catboost.joblib
+  feature_dictionary_catboost: feature_dictionary_catboost.csv
+  feature_processor_gbm: models/feature_processor_gbm.joblib
+  feature_dictionary_gbm: feature_dictionary_gbm.csv
+  target_processor: models/target_processor.joblib
+notes:
+- 'class_weights (balanced, train): {0.0: 0.6681104868395561, 1.0: 1.9871172209417187}'
+- SYMBOL is the split group and not a feature
+- gene_n_variants computed on the full frame before splitting (no target used)
+- 'CV in the modeling step: refit build_feature_processor() per fold; folds grouped
+  by SYMBOL'
