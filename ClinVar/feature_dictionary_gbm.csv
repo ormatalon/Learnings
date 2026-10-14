@@ -1,0 +1,127 @@
+step,feature,source,processor,method,dtype,params
+num,AF_ESP,AF_ESP,NumericProcessor,auto,float64,method=auto
+num,AF_EXAC,AF_EXAC,NumericProcessor,auto,float64,method=auto
+num,AF_TGP,AF_TGP,NumericProcessor,auto,float64,method=auto
+num,AF_ESP_zero,AF_ESP_zero,NumericProcessor,auto,float64,method=auto
+num,AF_EXAC_zero,AF_EXAC_zero,NumericProcessor,auto,float64,method=auto
+num,AF_TGP_zero,AF_TGP_zero,NumericProcessor,auto,float64,method=auto
+num,AF_max,AF_max,NumericProcessor,auto,float64,method=auto
+num,AF_n_cohorts,AF_n_cohorts,NumericProcessor,auto,float64,method=auto
+num,CADD_PHRED,CADD_PHRED,NumericProcessor,auto,float64,"missing_indicator=True, method=auto"
+num,CADD_PHRED__missing,CADD_PHRED,NumericProcessor,auto,int8,"missing_indicator=True, method=auto"
+num,LoFtool,LoFtool,NumericProcessor,auto,float64,"missing_indicator=True, method=auto"
+num,LoFtool__missing,LoFtool,NumericProcessor,auto,int8,"missing_indicator=True, method=auto"
+num,BLOSUM62,BLOSUM62,NumericProcessor,auto,float64,method=auto
+num,STRAND,STRAND,NumericProcessor,auto,float64,method=auto
+num,cDNA_position,cDNA_position,NumericProcessor,auto,float64,method=auto
+num,EXON_num,EXON_num,NumericProcessor,auto,float64,method=auto
+num,EXON_total,EXON_total,NumericProcessor,auto,float64,method=auto
+num,EXON_frac,EXON_frac,NumericProcessor,auto,float64,method=auto
+num,INTRON_num,INTRON_num,NumericProcessor,auto,float64,method=auto
+num,INTRON_total,INTRON_total,NumericProcessor,auto,float64,method=auto
+num,INTRON_frac,INTRON_frac,NumericProcessor,auto,float64,method=auto
+num,origin_germline,origin_germline,NumericProcessor,auto,float64,method=auto
+num,origin_somatic,origin_somatic,NumericProcessor,auto,float64,method=auto
+num,origin_inherited,origin_inherited,NumericProcessor,auto,float64,method=auto
+num,origin_paternal,origin_paternal,NumericProcessor,auto,float64,method=auto
+num,origin_maternal,origin_maternal,NumericProcessor,auto,float64,method=auto
+num,origin_de_novo,origin_de_novo,NumericProcessor,auto,float64,method=auto
+num,origin_n_bits,origin_n_bits,NumericProcessor,auto,float64,method=auto
+num,ref_len,ref_len,NumericProcessor,auto,float64,method=auto
+num,alt_len,alt_len,NumericProcessor,auto,float64,method=auto
+num,len_diff,len_diff,NumericProcessor,auto,float64,method=auto
+num,is_transition,is_transition,NumericProcessor,auto,float64,method=auto
+num,aa_to_stop,aa_to_stop,NumericProcessor,auto,float64,method=auto
+num,codon_pos,codon_pos,NumericProcessor,auto,float64,method=auto
+num,gene_n_variants,gene_n_variants,NumericProcessor,auto,float64,method=auto
+cat,CHROM__ord,CHROM,CategoricalProcessor,ordinal,int32,"method=ordinal, group_rare=True"
+cat,CLNVC__ord,CLNVC,CategoricalProcessor,ordinal,int32,"method=ordinal, group_rare=True"
+cat,IMPACT__ord,IMPACT,CategoricalProcessor,ordinal,int32,"method=ordinal, order=['MODIFIER', 'LOW', 'MODERATE', 'HIGH']"
+cat,SIFT__ord,SIFT,CategoricalProcessor,ordinal,int32,method=ordinal
+cat,PolyPhen__ord,PolyPhen,CategoricalProcessor,ordinal,int32,"method=ordinal, group_rare=True"
+cat,BAM_EDIT__ord,BAM_EDIT,CategoricalProcessor,ordinal,int32,method=ordinal
+cat,snv_change__ord,snv_change,CategoricalProcessor,ordinal,int32,method=ordinal
+cat,aa_ref__ord,aa_ref,CategoricalProcessor,ordinal,int32,method=ordinal
+cat,aa_alt__ord,aa_alt,CategoricalProcessor,ordinal,int32,method=ordinal
+list,CLNDN__missing,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__len,CLNDN,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__n_unique,CLNDN,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_not_specified,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_hereditary_cancer-predisposing_syndrome,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_not_provided,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_dilated_cardiomyopathy_1g,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_limb-girdle_muscular_dystrophy__type_2j,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_familial_cancer_of_breast,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_ataxia-telangiectasia_syndrome,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_cardiovascular_phenotype,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_hypertrophic_cardiomyopathy,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_dilated_cardiomyopathy__dominant,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_familial_hypercholesterolemia,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_familial_adenomatous_polyposis_1,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_limb-girdle_muscular_dystrophy__recessive,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_hereditary_nonpolyposis_colon_cancer,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_hereditary_breast_and_ovarian_cancer_syndrome,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_distal_myopathy_markesbery-griggs_type,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_hereditary_myopathy_with_early_respiratory_failure,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_myopathy__early-onset__with_fatal_cardiomyopathy,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_neurofibromatosis__type_1,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_thoracic_aortic_aneurysm_and_aortic_dissection,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_breast-ovarian_cancer__familial_1,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_ciliary_dyskinesia,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_colorectal_cancer__susceptibility_to__12,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_long_qt_syndrome,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_nonsyndromic_hearing_loss__recessive,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_lynch_syndrome,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_emery-dreifuss_muscular_dystrophy,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_hereditary_diffuse_gastric_cancer,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_fanconi_anemia__complementation_group_j,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__has_nonsyndromic_hearing_loss__dominant,CLNDN,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDN__n_other,CLNDN,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=|, top_k=30"
+list,CLNDISDB__missing,CLNDISDB,ListProcessor,['stats'],int8,"method=['stats'], sep=|"
+list,CLNDISDB__len,CLNDISDB,ListProcessor,['stats'],float64,"method=['stats'], sep=|"
+list,CLNDISDB__n_unique,CLNDISDB,ListProcessor,['stats'],float64,"method=['stats'], sep=|"
+list,CLNVI__missing,CLNVI,ListProcessor,['stats'],int8,"method=['stats'], sep=|"
+list,CLNVI__len,CLNVI,ListProcessor,['stats'],float64,"method=['stats'], sep=|"
+list,CLNVI__n_unique,CLNVI,ListProcessor,['stats'],float64,"method=['stats'], sep=|"
+list,CLNVI_sources__has_illumina_clinical_services_laboratory_illumina,CLNVI_sources,ListProcessor,['multihot'],int8,"method=['multihot'], sep=|, top_k=10"
+list,CLNVI_sources__has_uniprotkb__protein_,CLNVI_sources,ListProcessor,['multihot'],int8,"method=['multihot'], sep=|, top_k=10"
+list,CLNVI_sources__has_omim_allelic_variant,CLNVI_sources,ListProcessor,['multihot'],int8,"method=['multihot'], sep=|, top_k=10"
+list,CLNVI_sources__has_arup_laboratories__molecular_genetics_and_genomics,CLNVI_sources,ListProcessor,['multihot'],int8,"method=['multihot'], sep=|, top_k=10"
+list,CLNVI_sources__has_ldlr___lovd,CLNVI_sources,ListProcessor,['multihot'],int8,"method=['multihot'], sep=|, top_k=10"
+list,CLNVI_sources__has_hgmd,CLNVI_sources,ListProcessor,['multihot'],int8,"method=['multihot'], sep=|, top_k=10"
+list,CLNVI_sources__n_other,CLNVI_sources,ListProcessor,['multihot'],float64,"method=['multihot'], sep=|, top_k=10"
+list,MC_terms__missing,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__len,MC_terms,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__n_unique,MC_terms,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__has_missense_variant,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__has_synonymous_variant,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__has_intron_variant,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__has_5_prime_utr_variant,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__has_nonsense,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__has_frameshift_variant,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__has_3_prime_utr_variant,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__has_splice_donor_variant,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__has_2kb_upstream_variant,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__has_splice_acceptor_variant,MC_terms,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,MC_terms__n_other,MC_terms,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=|, top_k=20"
+list,Consequence__missing,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__len,Consequence,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__n_unique,Consequence,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_missense_variant,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_synonymous_variant,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_intron_variant,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_splice_region_variant,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_stop_gained,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_frameshift_variant,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_5_prime_utr_variant,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_splice_donor_variant,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_inframe_deletion,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_3_prime_utr_variant,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__has_splice_acceptor_variant,Consequence,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,Consequence__n_other,Consequence,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=&, top_k=20"
+list,CLNSIGINCL_sig__missing,CLNSIGINCL_sig,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=10, min_frac=0.0005"
+list,CLNSIGINCL_sig__len,CLNSIGINCL_sig,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=|, top_k=10, min_frac=0.0005"
+list,CLNSIGINCL_sig__n_unique,CLNSIGINCL_sig,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=|, top_k=10, min_frac=0.0005"
+list,CLNSIGINCL_sig__has_pathogenic,CLNSIGINCL_sig,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=10, min_frac=0.0005"
+list,CLNSIGINCL_sig__has_likely_pathogenic,CLNSIGINCL_sig,ListProcessor,"['stats', 'multihot']",int8,"method=['stats', 'multihot'], sep=|, top_k=10, min_frac=0.0005"
+list,CLNSIGINCL_sig__n_other,CLNSIGINCL_sig,ListProcessor,"['stats', 'multihot']",float64,"method=['stats', 'multihot'], sep=|, top_k=10, min_frac=0.0005"

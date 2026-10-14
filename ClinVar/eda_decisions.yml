@@ -1,0 +1,521 @@
+meta:
+  dataset: clinvar_conflicting
+  eda_notebook: eda_clinvar.ipynb
+  created: '2026-10-12'
+  files:
+    train: kagglehub:kevinarvai/clinvar-conflicting/clinvar_conflicting.csv
+    test: null
+  rules_file_found: true
+  rules_file: ../AGENT.md (Coding in notebook section; no CLAUDE.md in repo, approved by user)
+problem:
+  type: binary
+  target: CLASS
+  positive_class: 1
+  target_classes:
+  - 0
+  - 1
+  unit_of_observation: one ClinVar variant (GRCh37) with its VEP annotation for one transcript
+  key:
+  - CHROM
+  - POS
+  - REF
+  - ALT
+  entity_column: SYMBOL
+  time_column: null
+  rows_missing_target:
+    count: 0
+    meaning: unknown
+columns:
+  CHROM:
+    type: categorical
+    missing_pct: 0.0
+  POS:
+    type: identifier
+    missing_pct: 0.0
+  REF:
+    type: high_card_categorical
+    missing_pct: 0.0
+  ALT:
+    type: high_card_categorical
+    missing_pct: 0.0
+  AF_ESP:
+    type: continuous
+    missing_pct: 0.0
+    notes: minor-allele frequency; 55% zeros (absent or not covered)
+  AF_EXAC:
+    type: continuous
+    missing_pct: 0.0
+    notes: minor-allele frequency; 37% zeros; non-monotonic target relation
+  AF_TGP:
+    type: continuous
+    missing_pct: 0.0
+    notes: minor-allele frequency; 58% zeros
+  CLNDISDB:
+    type: list
+    missing_pct: 0.0
+    notes: pipe/comma-separated disease database IDs; parallel to CLNDN
+  CLNDISDBINCL:
+    type: list
+    missing_pct: 99.74
+  CLNDN:
+    type: list
+    missing_pct: 0.0
+    notes: pipe-separated disease names; count proxies number of submitters (leakage check)
+  CLNDNINCL:
+    type: list
+    missing_pct: 99.74
+  CLNHGVS:
+    type: identifier
+    missing_pct: 0.0
+  CLNSIGINCL:
+    type: list
+    missing_pct: 99.74
+  CLNVC:
+    type: categorical
+    missing_pct: 0.0
+  CLNVI:
+    type: list
+    missing_pct: 57.57
+    notes: pipe-separated external variant IDs; missing = no cross-reference (MNAR)
+  MC:
+    type: list
+    missing_pct: 1.3
+    notes: comma-separated 'SO:id|term' molecular consequences
+  ORIGIN:
+    type: categorical
+    missing_pct: 0.0
+    notes: bit mask (1 germline, 2 somatic, 4 inherited, 8 paternal, 16 maternal, 32 de novo, ...)
+  SSR:
+    type: low_card_numeric
+    missing_pct: 99.8
+  CLASS:
+    type: target
+    missing_pct: 0.0
+  Allele:
+    type: high_card_categorical
+    missing_pct: 0.0
+    notes: '''-'' means deleted allele, not missing'
+  Consequence:
+    type: list
+    missing_pct: 0.0
+    notes: VEP consequences joined by '&'
+  IMPACT:
+    type: categorical
+    missing_pct: 0.0
+  SYMBOL:
+    type: high_card_categorical
+    missing_pct: 0.02
+    notes: gene; 2,328 levels; entity / group column
+  Feature_type:
+    type: categorical
+    missing_pct: 0.02
+  Feature:
+    type: high_card_categorical
+    missing_pct: 0.02
+  BIOTYPE:
+    type: categorical
+    missing_pct: 0.02
+  EXON:
+    type: high_card_categorical
+    missing_pct: 13.64
+    notes: '''n/total'' string'
+  INTRON:
+    type: high_card_categorical
+    missing_pct: 86.5
+    notes: '''n/total'' string'
+  cDNA_position:
+    type: continuous
+    missing_pct: 13.63
+    notes: text; ranges 'a-b' and '?-b' for indels
+  CDS_position:
+    type: continuous
+    missing_pct: 15.27
+    notes: text; ranges for indels
+  Protein_position:
+    type: continuous
+    missing_pct: 15.27
+    notes: text; ranges for indels
+  Amino_acids:
+    type: high_card_categorical
+    missing_pct: 15.35
+    notes: '''ref/alt'' amino acids; missense only'
+  Codons:
+    type: high_card_categorical
+    missing_pct: 15.35
+    notes: '''ref/alt'' codons'
+  DISTANCE:
+    type: continuous
+    missing_pct: 99.83
+  STRAND:
+    type: low_card_numeric
+    missing_pct: 0.02
+  BAM_EDIT:
+    type: categorical
+    missing_pct: 50.96
+  SIFT:
+    type: categorical
+    missing_pct: 61.9
+    notes: missense only; missing = not applicable
+  PolyPhen:
+    type: categorical
+    missing_pct: 61.96
+    notes: missense only; missing = not applicable
+  MOTIF_NAME:
+    type: categorical
+    missing_pct: 100.0
+  MOTIF_POS:
+    type: low_card_numeric
+    missing_pct: 100.0
+  HIGH_INF_POS:
+    type: categorical
+    missing_pct: 100.0
+  MOTIF_SCORE_CHANGE:
+    type: low_card_numeric
+    missing_pct: 100.0
+  LoFtool:
+    type: continuous
+    missing_pct: 6.46
+  CADD_PHRED:
+    type: continuous
+    missing_pct: 1.68
+  CADD_RAW:
+    type: continuous
+    missing_pct: 1.68
+  BLOSUM62:
+    type: low_card_numeric
+    missing_pct: 60.74
+    notes: missense only; missing = not applicable
+cleaning:
+  parsing_fixes:
+  - column: cDNA_position
+    fix: manual
+    note: take the first integer of the text ('943-944' -> 943, '?-117' -> 117)
+    status: recommended
+    reason: numbers stored as text because indels carry ranges
+  - column: CDS_position
+    fix: manual
+    note: take the first integer of the text ('943-944' -> 943, '?-117' -> 117)
+    status: recommended
+    reason: numbers stored as text because indels carry ranges
+  - column: Protein_position
+    fix: manual
+    note: take the first integer of the text ('943-944' -> 943, '?-117' -> 117)
+    status: recommended
+    reason: numbers stored as text because indels carry ranges
+  - column: EXON
+    fix: manual
+    note: split 'n/total' into EXON_num and EXON_total
+    status: recommended
+    reason: two numbers packed into one string
+  - column: INTRON
+    fix: manual
+    note: split 'n/total' into INTRON_num and INTRON_total
+    status: recommended
+    reason: two numbers packed into one string
+  null_tokens:
+  - NA
+  - N/A
+  - 'null'
+  - None
+  - ''
+  - ' '
+  - '?'
+  sentinels_to_nan: []
+  spelling_mappings: []
+  duplicates:
+    full_row:
+      count: 0
+      action: drop
+      status: applied
+    conflicting_key:
+      count: 0
+      action: keep_all
+      status: applied
+      reason: key CHROM, POS, REF, ALT is unique; nothing to resolve
+  invalid_values: []
+  outlier_removals: []
+recommendations:
+  drop_columns:
+  - column: POS
+    reason: genomic coordinate, part of the key
+    status: recommended
+  - column: CLNHGVS
+    reason: unique identifier (key as a string)
+    status: recommended
+  - column: Allele
+    reason: same as ALT in VEP notation
+    status: recommended
+  - column: Feature
+    reason: transcript ID, one-to-one with SYMBOL for 98.4% of genes
+    status: recommended
+  - column: Feature_type
+    reason: near-constant (99.98% Transcript)
+    status: recommended
+  - column: BIOTYPE
+    reason: near-constant (99.95% protein_coding)
+    status: recommended
+  - column: MOTIF_NAME
+    reason: 100% missing
+    status: recommended
+  - column: MOTIF_POS
+    reason: 100% missing
+    status: recommended
+  - column: HIGH_INF_POS
+    reason: 100% missing
+    status: recommended
+  - column: MOTIF_SCORE_CHANGE
+    reason: 100% missing
+    status: recommended
+  - column: DISTANCE
+    reason: 99.8% missing
+    status: recommended
+  - column: SSR
+    reason: 99.8% missing, no target association (BH p 0.57)
+    status: recommended
+  - column: CLNDISDBINCL
+    reason: 99.7% missing
+    status: recommended
+  - column: CLNDNINCL
+    reason: 99.7% missing
+    status: recommended
+  - column: CADD_RAW
+    reason: Spearman 1.00 with CADD_PHRED
+    status: recommended
+  - column: CDS_position
+    reason: Pearson 1.00 with cDNA_position, which covers more rows
+    status: recommended
+  - column: Protein_position
+    reason: Pearson 1.00 with cDNA_position
+    status: recommended
+  leakage:
+  - column: CLNDN
+    evidence: names collected per submission; 22% conflicting with 1 name vs 40% with 4+ (AUC 0.57)
+    verdict: check_with_user
+  - column: CLNDISDB
+    evidence: same information as CLNDN as database IDs
+    verdict: check_with_user
+  - column: CLNSIGINCL
+    evidence: clinical-significance field; 167 rows, 41% conflicting vs 25%
+    verdict: check_with_user
+  - column: CLNVI
+    evidence: external cross-references; 32% conflicting when present vs 20%
+    verdict: keep
+  missing_indicators:
+  - column: CLNVI
+    mechanism: MNAR
+    reason: no cross-reference = less-studied variant; 20% vs 32% conflicting
+  - column: CADD_PHRED
+    mechanism: MAR
+    reason: missing for some indels (AUC 0.99); 12% vs 25% conflicting
+  - column: SIFT
+    mechanism: MAR
+    reason: missense only; encode missing as 'not_applicable' level
+  - column: PolyPhen
+    mechanism: MAR
+    reason: missense only; encode missing as 'not_applicable' level
+  - column: BLOSUM62
+    mechanism: MAR
+    reason: missense only (61% missing)
+  - column: LoFtool
+    mechanism: MAR
+    reason: gene-level score missing for unscored genes
+  - column: cDNA_position
+    mechanism: MAR
+    reason: missing exactly for intronic variants
+  capping: []
+  transforms:
+  - column: cDNA_position
+    transform: log1p
+    reason: skew 5.6, TTN extremes; for linear models
+  rare_level_grouping:
+  - column: CLNVC
+    levels:
+    - Indel
+    - Insertion
+    - Inversion
+    - Microsatellite
+    reason: each < 1% of rows
+  - column: CHROM
+    levels:
+    - MT
+    reason: 16 rows
+  - column: PolyPhen
+    levels:
+    - unknown
+    reason: 4 rows
+  - column: Consequence
+    levels:
+    - 5_prime_UTR_variant
+    - inframe_deletion
+    - splice_region_variant&synonymous_variant
+    - splice_donor_variant
+    - 3_prime_UTR_variant
+    - splice_acceptor_variant
+    - '...'
+    reason: 41 of 48 combinations < 1% of rows; group after splitting on '&'
+  manual_treatment:
+  - column: REF
+    kind: high_card_categorical
+    cardinality: 866
+    examples:
+    - G
+    - A
+    - T
+  - column: ALT
+    kind: high_card_categorical
+    cardinality: 458
+    examples:
+    - C
+    - A
+    - G
+  - column: SYMBOL
+    kind: high_card_categorical
+    cardinality: 2328
+    examples:
+    - B3GALT6
+    - TMEM240
+    - GNB1
+  - column: CLNDN
+    kind: list
+    cardinality: 9260
+    examples:
+    - not_specified
+    - Spinocerebellar_ataxia_21|not_provided
+    - Strabismus|Nystagmus|Hypothyroidism|Intellectual_disability|Seizures|Muscular_hypotonia|Global_developmental_delay|Failure_to_thrive|Growth_delay|Developmental_regression|Expressive_language_delay|Limb_hypertonia|Inability_to_walk|Infantile_axial_hypotonia|Multifocal_epileptiform_discharges|EEG_with_generalized_epileptiform_discharges|Upper_limb_hypertonia|Myelodysplastic_syndrome|Inborn_genetic_diseases|Cleft_palate|Dystonia|Mental_retardation,_autosomal_dominant_42|not_provided
+  - column: CLNDISDB
+    kind: list
+    cardinality: 9234
+    examples:
+    - MedGen:CN169374
+    - MedGen:C1843891,OMIM:607454,Orphanet:ORPHA98773|MedGen:CN517202
+    - Human_Phenotype_Ontology:HP:0000486,MedGen:C0038379|Human_Phenotype_Ontology:HP:0000639,MedGen:C0028738|Human_Phenotype_Ontology:HP:0000821,MedGen:C0020676,Orphanet:ORPHA181396|Human_Phenotype_Ontology:HP:0001249,MedGen:C1843367|Human_Phenotype_Ontology:HP:0001250,MedGen:C0036572|Human_Phenotype_Ontology:HP:0001252,MedGen:C0026827|Human_Phenotype_Ontology:HP:0001263,MedGen:C4020875|Human_Phenotype_Ontology:HP:0001508,MedGen:C0231246|Human_Phenotype_Ontology:HP:0001510,MedGen:C3552463|Human_Phenotype_Ontology:HP:0002376,MedGen:C1855009|Human_Phenotype_Ontology:HP:0002474,MedGen:C1847610|Human_Phenotype_Ontology:HP:0002509,MedGen:C1838391|Human_Phenotype_Ontology:HP:0002540,MedGen:C0560046|Human_Phenotype_Ontology:HP:0009062,MedGen:C3806604|Human_Phenotype_Ontology:HP:0010841,MedGen:C4021219|Human_Phenotype_Ontology:HP:0011198,MedGen:C4023476|Human_Phenotype_Ontology:HP:0200049,MedGen:C4021898|MeSH:D009190,MedGen:C3463824,OMIM:614286,Orphanet:ORPHA52688|MeSH:D030342,MedGen:C0950123|MedGen:C0008925,Orphanet:ORPHA2014|MedGen:C0393593,Orphanet:ORPHA68363|MedGen:C4310774,OMIM:616973|MedGen:CN517202
+  - column: CLNVI
+    kind: list
+    cardinality: 27654
+    examples:
+    - UniProtKB_(protein):Q96L58#VAR_059317
+    - OMIM_Allelic_Variant:616101.0001|UniProtKB_(protein):Q5SV17#VAR_071909
+    - OMIM_Allelic_Variant:139380.0002|UniProtKB_(protein):P62873#VAR_076648
+  - column: MC
+    kind: list
+    cardinality: 90
+    examples:
+    - SO:0001583|missense_variant
+    - SO:0001583|missense_variant,SO:0001623|5_prime_UTR_variant
+    - SO:0001583|missense_variant,SO:0001623|5_prime_UTR_variant,SO:0001627|intron_variant
+  - column: Consequence
+    kind: list
+    cardinality: 48
+    examples:
+    - missense_variant
+    - missense_variant&splice_region_variant
+    - intron_variant
+  - column: CLNSIGINCL
+    kind: list
+    cardinality: 137
+    examples:
+    - 424754:Likely_pathogenic
+    - 30118:risk_factor
+    - 60702:Pathogenic
+  - column: ORIGIN
+    kind: nested
+    cardinality: 31
+    examples:
+    - '1'
+    - '35'
+    - '33'
+  - column: EXON
+    kind: nested
+    cardinality: 3264
+    examples:
+    - 1/1
+    - 4/4
+    - 6/12
+  - column: INTRON
+    kind: nested
+    cardinality: 1929
+    examples:
+    - 6/27
+    - 8/17
+    - 3/20
+  - column: Amino_acids
+    kind: nested
+    cardinality: 1262
+    examples:
+    - E/D
+    - P/L
+    - I/T
+  - column: Codons
+    kind: nested
+    cardinality: 2220
+    examples:
+    - gaG/gaC
+    - cCg/cTg
+    - aTc/aCc
+  redundant_pairs:
+  - columns:
+    - CADD_PHRED
+    - CADD_RAW
+    measure: spearman
+    value: 1.0
+    suggestion: keep CADD_PHRED
+  - columns:
+    - cDNA_position
+    - CDS_position
+    measure: pearson
+    value: 1.0
+    suggestion: keep cDNA_position
+  - columns:
+    - CDS_position
+    - Protein_position
+    measure: pearson
+    value: 1.0
+    suggestion: drop both, keep cDNA_position
+  - columns:
+    - ALT
+    - Allele
+    measure: equality on SNVs
+    value: 1.0
+    suggestion: keep ALT
+  - columns:
+    - SYMBOL
+    - Feature
+    measure: one-to-one share
+    value: 0.984
+    suggestion: keep SYMBOL
+  - columns:
+    - AF_ESP
+    - AF_EXAC
+    measure: pearson
+    value: 0.852
+    suggestion: keep both for trees; AF_EXAC primary
+  - columns:
+    - SIFT
+    - PolyPhen
+    measure: missing indicator correlation
+    value: 1.0
+    suggestion: keep both levels; share one not_applicable indicator
+  datetime_parts: []
+  target:
+    transform: null
+    class_weights: recommended
+    reason: 25.2% positives (3:1); weights or PR-AUC-driven threshold
+validation:
+  split: stratified
+  group_column: SYMBOL
+  stratify_on:
+  - CLASS
+  holdout: null
+  representativeness_issues: []
+  secondary_check: StratifiedGroupKFold by SYMBOL for unseen-gene performance
+  metric:
+    primary: pr_auc
+    secondary:
+    - roc_auc
+    - brier
+    - f1
+    reason: 25% positives and a ranking use case (review triage)
+open_questions:
+- 'When is a variant scored: on existing ClinVar records (keep CLNDN / CLNDISDB) or at first submission (drop them as leakage)?'
+- 'Keep CLNSIGINCL (167 rows, a clinical-significance field)? Default: drop.'
+- 'Primary validation: random stratified (variants in known genes) or grouped by gene (unseen genes)?'
